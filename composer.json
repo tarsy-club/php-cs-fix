@@ -57,8 +57,8 @@
     },
     "require-dev": {
         "brainmaestro/composer-git-hooks": "^2.8",
-        "tarsy-club/json-cs-fix": "^1.0",
-        "neronmoon/scriptsdev": "*"
+        "neronmoon/scriptsdev": "*",
+        "tarsy-club/json-cs-fix": "^1.0"
     },
     "scripts": {
         "_composer:update": "@composer update --no-interaction --no-plugins --no-suggest --no-scripts",
