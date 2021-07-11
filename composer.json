@@ -1,0 +1,86 @@
+{
+    "bin": [
+        "bin-dist/php-cs-config.php",
+        "bin-dist/return-php.php"
+    ],
+    "config": {
+        "apcu-autoloader": true,
+        "cache-files-ttl": 7776000,
+        "discard-changes": true,
+        "optimize-autoloader": true,
+        "preferred-install": "dist"
+    },
+    "description": "tarsy-club php-cs-fix",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.x-dev"
+        },
+        "hooks": {
+            "pre-commit": "composer run git:pre-commit"
+        },
+        "scripts-dev": {
+            "_json:fix": "json-cs-fix.sh",
+            "git:pre-commit": [
+                "@json:fix",
+                "@validate:composer"
+            ],
+            "git:update-hooks": {
+                "add": "cghooks add -f --lock-dir=${PWD}/var/cghooks",
+                "update": "cghooks update --lock-dir=${PWD}/var/cghooks"
+            },
+            "json:fix": [
+                "@_json:fix",
+                "@_json:fix composer.lock"
+            ],
+            "post-install-cmd": [
+                "@post:install:cmd:dev"
+            ],
+            "post-update-cmd": [
+                "@post:install:cmd:dev"
+            ],
+            "post:install:cmd:dev": [
+                "@git:update-hooks"
+            ]
+        }
+    },
+    "license": [
+        "proprietary"
+    ],
+    "name": "tarsy-club/php-cs-fix",
+    "replace": {
+        "paragonie/random_compat": "*",
+        "symfony/polyfill-php70": "*"
+    },
+    "require": {
+        "friendsofphp/php-cs-fixer": "~2.16.0",
+        "php": "^7.0 || ^8.0"
+    },
+    "require-dev": {
+        "brainmaestro/composer-git-hooks": "^2.8",
+        "tarsy-club/json-cs-fix": "^1.0",
+        "neronmoon/scriptsdev": "*"
+    },
+    "scripts": {
+        "_composer:update": "@composer update --no-interaction --no-plugins --no-suggest --no-scripts",
+        "_composer:update:light": "@_composer:update --no-autoloader --ignore-platform-reqs --no-progress",
+        "_fix": "php-cs-fixer fix --config $(return-php.php php-cs-config.php)",
+        "composer:update:light": "@_composer:update:light --no-dev",
+        "fix": "@_fix",
+        "php-cs-fix": "@fix",
+        "post-install-cmd": "@post:install:cmd",
+        "post-update-cmd": "@post:install:cmd",
+        "post:install:cmd": {
+            "empty": "echo empty post:install:cmd"
+        },
+        "test": {
+            "bin-dist": "php-cs-fixer fix --config $(bin-dist/return-php.php php-cs-config.php) ./bin-dist",
+            "examples": "php-cs-fixer fix --config $(bin-dist/return-php.php php-cs-config.php) ./examples"
+        },
+        "validate:composer": {
+            "lock": "@composer u --no-progress --no-autoloader --no-scripts --no-suggest --ignore-platform-reqs --no-plugins nothing --lock",
+            "platform": "@composer check-platform-reqs --no-interaction --no-plugins",
+            "strict": "@composer validate --no-interaction --no-plugins --strict --no-check-all --no-check-publish"
+        }
+    },
+    "type": "library"
+}
